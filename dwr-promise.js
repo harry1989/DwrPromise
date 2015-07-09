@@ -86,6 +86,7 @@ DwrService = (function(){
 				 */
 				if(args.length > 0 ){
 					var last_arg = args[args.length - 1];
+					var callback = last_arg['callback'];
 					if (typeof(last_arg) === 'function'){
 						usePromise = false;
 						userCbFn = last_arg;
@@ -96,13 +97,11 @@ DwrService = (function(){
 					 * Sometimes last argument can be an object having
 					 * async and callback functions.
 					 */
-					else if (typeof(last_arg) === 'object'){
-						var callback = last_arg['callback'];
-						if (callback && typeof(callback) === 'function'){
-							usePromise = false;
-							userCbFn = callback;
-							args[args.length - 1] = $.extend({}, last_arg, async_cb_object);;
-						}
+					else if (typeof(last_arg) === 'object' && callback && typeof(callback) === 'function' ){
+
+						usePromise = false;
+						userCbFn = callback;
+						args[args.length - 1] = $.extend({}, last_arg, async_cb_object);
 						
 						var errorCb = last_arg['errorHandler'];
 						if (errorCb && typeof(errorCb) === 'function'){
